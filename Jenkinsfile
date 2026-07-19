@@ -45,8 +45,8 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'nexus-creds',
-                    usernameVariable: 'NEXUS_USER',
-                    passwordVariable: 'NEXUS_PASS'
+                    usernameVariable: 'admin',
+                    passwordVariable: 'suresh'
                 )]) {
                     sh '''
                     curl -v -u $NEXUS_USER:$NEXUS_PASS \
