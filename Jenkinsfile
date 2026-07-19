@@ -32,8 +32,8 @@ pipeline {
                 dir('backend') {
                     sh '''
                     mvn sonar:sonar \
-                    -Dsonar.projectKey=amazon-app \
-                    -Dsonar.host.url=http://YOUR_SONAR_SERVER:9000
+                     -Dsonar.projectKey=amazon-app \
+                     -Dsonar.host.url=http://172.31.26.56:9000
                     '''
                 }
             }
