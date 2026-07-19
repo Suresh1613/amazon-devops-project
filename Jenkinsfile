@@ -31,12 +31,13 @@ pipeline {
             steps {
                 dir('backend') {
                     withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
-                    sh '''
-                    mvn sonar:sonar \
-                     -Dsonar.projectKey=amazon-app \
-                     -Dsonar.host.url=http://172.31.26.56:9000
-                     -Dsonar.login=$SONAR_TOKEN
-                    '''
+                        sh '''
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=amazon-app \
+                        -Dsonar.host.url=http://172.31.26.56:9000 \
+                        -Dsonar.login=$SONAR_TOKEN
+                        '''
+                    }
                 }
             }
         }
