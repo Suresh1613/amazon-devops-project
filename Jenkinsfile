@@ -1,5 +1,4 @@
 pipeline {
-
     agent any
 
     stages {
@@ -33,9 +32,9 @@ pipeline {
                     withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                         sh '''
                         mvn sonar:sonar \
-                        -Dsonar.projectKey=amazon-app \
-                        -Dsonar.host.url=http://172.31.26.56:9000 \
-                        -Dsonar.login=$SONAR_TOKEN
+                          -Dsonar.projectKey=amazon-app \
+                          -Dsonar.host.url=http://172.31.26.56:9000 \
+                          -Dsonar.login=$SONAR_TOKEN
                         '''
                     }
                 }
@@ -44,23 +43,27 @@ pipeline {
 
         stage('Upload to Nexus') {
             steps {
-                sh '''
-                curl -u admin:PASSWORD \
-                --upload-file backend/target/amazon-app-1.0.0.jar \
-                http://YOUR_NEXUS:8081/repository/maven-releases/amazon-app.jar
-                '''
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexus-creds',
+                    usernameVariable: 'NEXUS_USER',
+                    passwordVariable: 'NEXUS_PASS'
+                )]) {
+                    sh '''
+                    curl -v -u $NEXUS_USER:$NEXUS_PASS \
+                      --upload-file backend/target/amazon-app-1.0.0.jar \
+                      http://172.31.22.217:8081/repository/maven-releases/amazon-app-1.0.0.jar
+                    '''
+                }
             }
         }
 
         stage('Deploy Frontend') {
             steps {
                 sh '''
-                cp -r frontend/dist/* \
-                /opt/tomcat/webapps/ROOT/
+                cp -r frontend/dist/* /opt/tomcat/webapps/ROOT/
                 '''
             }
         }
 
     }
-
 }
