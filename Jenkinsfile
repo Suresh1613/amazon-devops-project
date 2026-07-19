@@ -41,7 +41,7 @@ pipeline {
             }
         }
 
-        stage('Upload to Nexus') {
+    stage('Upload to Nexus') {
     steps {
         withCredentials([usernamePassword(
             credentialsId: 'nexus-creds',
@@ -50,8 +50,8 @@ pipeline {
         )]) {
             sh '''
             curl -v -u $NEXUS_USER:$NEXUS_PASS \
-              --upload-file backend/target/amazon-app-1.0.0.jar \
-              http://172.31.22.217:8081/repository/maven-releases/amazon-app-1.0.0.jar
+            --upload-file backend/target/amazon-app-1.0.0.jar \
+            http://172.31.22.217:8081/repository/maven-releases/amazon-app-1.0.0.jar
             '''
         }
     }
