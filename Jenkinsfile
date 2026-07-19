@@ -41,21 +41,21 @@ pipeline {
             }
         }
 
-    stage('Upload to Nexus') {
-    steps {
-        withCredentials([usernamePassword(
-            credentialsId: 'nexus-creds',
-            usernameVariable: 'NEXUS_USER',
-            passwordVariable: 'NEXUS_PASS'
-        )]) {
-            sh '''
-            curl -v -u $NEXUS_USER:$NEXUS_PASS \
-            --upload-file backend/target/amazon-app-1.0.0.jar \
-            http://172.31.22.217:8081/repository/maven-releases/amazon-app-1.0.0.jar
-            '''
+        stage('Upload to Nexus') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'nexus-creds',
+                    usernameVariable: 'NEXUS_USER',
+                    passwordVariable: 'NEXUS_PASS'
+                )]) {
+                    sh '''
+                    curl -v -u $NEXUS_USER:$NEXUS_PASS \
+                    --upload-file backend/target/amazon-app-1.0.0.jar \
+                    http://172.31.22.217:8081/repository/maven-releases/com/example/amazon-app/1.0.0/amazon-app-1.0.0.jar
+                    '''
+                }
+            }
         }
-    }
-}
 
         stage('Deploy Frontend') {
             steps {
